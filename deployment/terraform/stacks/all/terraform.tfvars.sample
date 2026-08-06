@@ -1,0 +1,212 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+# =============================================================================
+# Sample terraform.tfvars for the single-apply Browser Agent stack
+# =============================================================================
+# Copy this file to `terraform.tfvars` and replace the placeholder values.
+# Every line is a placeholder — nothing in this file points at a real AWS
+# account or resource.
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# AWS provider
+# -----------------------------------------------------------------------------
+
+# AWS region for the deployment. CloudFront ACM certs must live in us-east-1,
+# but everything else goes into this region.
+aws_region = "us-west-2"
+
+# AWS CLI profile. Leave empty to use the default credential chain (env vars,
+# EC2 instance profile, SSO, etc.).
+aws_profile = ""
+
+# -----------------------------------------------------------------------------
+# Project metadata
+# -----------------------------------------------------------------------------
+
+# Short identifier used to name and tag every resource.
+project_name = "browser-agent-blog"
+
+# Tag + naming hint. Must be one of: dev | staging | prod.
+environment = "dev"
+
+# -----------------------------------------------------------------------------
+# Cognito
+# -----------------------------------------------------------------------------
+
+# Globally unique hosted-UI domain prefix. Must be unique across every AWS
+# account in the target region. Append a random suffix if you hit a collision.
+cognito_domain_prefix = "browser-agent-blog-REPLACE-ME"
+
+# OAuth redirect URLs for the SPA client. Leave empty (default) to let the
+# stack derive them from the CloudFront domain — `https://<cloudfront>/callback`
+# and `https://<cloudfront>/login`. Add entries here only when you need
+# additional callbacks (e.g. `http://localhost:3000/callback` for local dev).
+ui_callback_urls = []
+ui_logout_urls   = []
+
+# -----------------------------------------------------------------------------
+# Container images
+# -----------------------------------------------------------------------------
+# Each image can be pinned by either a mutable tag or an immutable digest.
+# Digest pinning is the recommended production path — every image refresh
+# becomes a `terraform apply` (no out-of-band `aws ecs update-service` or
+# `aws bedrock-agentcore-control update-agent-runtime` needed), and rollbacks
+# are a one-line revert in this file.
+#
+# - When `*_image_digest` is set (sha256:...), it wins and Terraform deploys
+#   `repo@sha256:...`.
+# - When `*_image_digest` is empty, Terraform falls back to `*_image_tag`.
+#
+# The build script prints the digest after every push:
+#   ./scripts/docker_push_ecr.sh
+#   ...
+#   IMAGE DIGEST (for Terraform deployment):
+#   image_digest = "sha256:..."
+
+# Tag of the browser-agent container in ECR. Used when
+# browser_agent_image_digest is empty.
+browser_agent_image_tag = "linux-arm64"
+
+# Optional immutable digest of the browser-agent image. Set this for
+# production deployments — leave empty for fast iteration with a mutable tag.
+browser_agent_image_digest = ""
+
+# Tag of the gateway container in ECR. Used when gateway_image_digest is
+# empty. The gateway push script writes a platform-suffixed tag (linux-amd64)
+# and a version tag from pyproject.toml; pin to the platform tag here so
+# apply targets a stable, script-produced ref.
+gateway_image_tag = "linux-amd64"
+
+# Optional immutable digest of the gateway image.
+gateway_image_digest = ""
+
+# -----------------------------------------------------------------------------
+# Gateway ECS Fargate sizing
+# -----------------------------------------------------------------------------
+
+# Fargate CPU units (256 / 512 / 1024 / 2048 / 4096).
+ecs_cpu = 256
+
+# Memory in MiB. Must be Fargate-compatible with `ecs_cpu` (see AWS docs).
+ecs_memory = 512
+
+# Number of gateway tasks to run.
+gateway_desired_count = 2
+
+# -----------------------------------------------------------------------------
+# Networking — you must supply an existing VPC + subnets + security groups.
+# This stack does NOT provision a VPC; use your default VPC or an existing one.
+# -----------------------------------------------------------------------------
+
+# Existing VPC to attach the gateway ECS service and ALB to.
+vpc_id = "vpc-REPLACE-ME"
+
+# Private subnets for the gateway tasks (NAT egress required to reach
+# bedrock-agentcore.<region>.amazonaws.com).
+gateway_subnet_ids = [
+  "subnet-REPLACE-ME-a",
+  "subnet-REPLACE-ME-b",
+]
+
+# Security group(s) attached to the gateway tasks. Must allow inbound from the
+# ALB security group on port 80 and outbound 443 to AWS APIs.
+gateway_security_group_ids = [
+  "sg-REPLACE-ME-tasks",
+]
+
+# Public subnets for the ALB (at least 2 AZs).
+alb_subnet_ids = [
+  "subnet-REPLACE-ME-alb-a",
+  "subnet-REPLACE-ME-alb-b",
+]
+
+# Security group for the ALB. Allow inbound 443 from 0.0.0.0/0 if internet-
+# facing.
+alb_security_group_ids = [
+  "sg-REPLACE-ME-alb",
+]
+
+# Keep false when tasks live in private subnets with NAT.
+alb_assign_public_ip = false
+
+# -----------------------------------------------------------------------------
+# TLS / CloudFront
+# -----------------------------------------------------------------------------
+
+# --- Production path: custom hostname + Route 53 (recommended) -------------
+# Public hostname for the gateway ALB. When set together with
+# route53_zone_id below, Terraform requests an ACM cert via DNS validation,
+# attaches it to the ALB, and creates the DNS alias record automatically —
+# wss:// just works.
+gateway_public_hostname = ""
+# Route 53 hosted zone ID for the parent domain (e.g. "Z08534151U8PD4W96Z6ZO"
+# for example.com). Leave empty if your DNS is managed outside Route 53;
+# you'll need to set acm_certificate_arn yourself and add the gateway DNS
+# record at your registrar.
+route53_zone_id        = ""
+manage_acm_certificate = true
+
+# --- Bring-your-own-cert path ---------------------------------------------
+# Use this when DNS is outside Route 53 OR you want to reuse an existing
+# wildcard cert. Set manage_acm_certificate = false and provide the ARN.
+# The cert must live in the same region as the ALB.
+acm_certificate_arn = ""
+
+# --- Development path -----------------------------------------------------
+# Leave all three above empty/false to keep the ALB on HTTP only. The UI
+# will load and Cognito sign-in will work, but sending a chat prompt will
+# fail because browsers block ws:// from https:// origins. Useful for
+# validating the auth chain without a domain.
+
+cloudfront_price_class = "PriceClass_100"
+
+# Empty = use the default *.cloudfront.net certificate. Set both fields
+# below if you bring a custom domain (cert must live in us-east-1).
+cloudfront_acm_certificate_arn = ""
+cloudfront_aliases             = []
+
+# -----------------------------------------------------------------------------
+# Environment variables (passthrough pattern — assembled here, passed through
+# to the module unchanged per steering tech.md).
+# -----------------------------------------------------------------------------
+
+# Environment variables injected into the browser-agent AgentCore runtime.
+# See browser-agent-container/.env.example for the full list.
+# Note: BA_SESSION_STORE_BUCKET is auto-derived from the session-store
+# bucket — you do not need to set it here.
+# LOG_LEVEL defaults to ERROR so a published/deployed build does not write
+# access tokens or page content into application logs. Set it to DEBUG or INFO
+# only for short-lived troubleshooting.
+# BA_SCREENSHOT_URL_EXPIRY_MINUTES is kept short (15) so a leaked pre-signed
+# screenshot URL is only replayable briefly.
+environment_variables = {
+  LOG_LEVEL                        = "ERROR"
+  AWS_DEFAULT_REGION               = "us-west-2"
+  BA_BROWSER_MODEL_ID              = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  BA_SESSION_STORE_TYPE            = "s3"
+  BA_SESSION_STORE_PREFIX          = "browser-sessions"
+  BA_SESSION_TIMEOUT               = "3600"
+  BA_MAX_STEPS_PER_SESSION         = "100"
+  BA_HITL_TIMEOUT_SECONDS          = "300"
+  BA_DISCONNECT_GRACE_SECONDS      = "30"
+  BA_SCREENSHOT_URL_EXPIRY_MINUTES = "15"
+}
+
+# Environment variables for the gateway ECS task. BROWSER_AGENT_ARN and
+# BROWSER_AGENTCORE_ENDPOINT are auto-derived from the AgentCore runtime
+# ARN and the deployment region; only LOG_LEVEL needs to be set here.
+# Defaults to ERROR for the same log-hygiene reason as above.
+gateway_environment_variables = {
+  LOG_LEVEL = "ERROR"
+}
+
+# -----------------------------------------------------------------------------
+# Session store
+# -----------------------------------------------------------------------------
+
+# Allow `terraform destroy` to delete the S3 session bucket even when it still
+# contains objects. Safe for the blog reference architecture; flip to false for
+# production.
+session_bucket_force_destroy = true

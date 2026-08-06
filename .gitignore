@@ -1,0 +1,62 @@
+# Repo-level ignore patterns (cross-cutting).
+# Per-project .gitignore files cover project-specific artifacts.
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/tasks.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+.pytest_cache/
+.hypothesis/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# JavaScript / TypeScript
+node_modules/
+dist/
+build/
+coverage/
+.parcel-cache/
+.yarn-cache/
+*.log
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+user-*.tfvars
+user-terraform.tfvars
+terraform.tfvars
+
+# Environment
+.env
+.env.local
+.env.dev
+
+# Local scratch
+/tmp/
+*.tmp
+*.temp
+
+# Editor lock / backup files
+*.bkp
+*.bak
+*.swp
+*.swo
+*~
+.$*
+

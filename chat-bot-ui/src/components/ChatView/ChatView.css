@@ -1,0 +1,29 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * ChatView component styles.
+ *
+ * Message-list wrapper and empty-state hint. The Step Card UX (StepCard,
+ * ReasoningTrace, FinalAnswer) carries its own styling — ChatView only
+ * provides the outer layout chrome. Theme-aware via MUI CSS variables
+ * (see ThemeManager.tsx).
+ */
+
+.browser-message-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  color: var(--mui-palette-text-primary);
+}
+
+.browser-empty-state {
+  padding: 24px 16px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--mui-palette-text-secondary);
+  font-style: italic;
+}

@@ -1,0 +1,105 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * ReasoningTrace component styles.
+ *
+ * Collapsible container that groups all step cards for a single assistant
+ * turn under one header. Colors route through MUI theme CSS variables so
+ * the header stays readable across every theme.
+ */
+
+.browser-trace {
+  margin: 6px 0 10px;
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--mui-palette-background-paper);
+}
+
+.browser-trace-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  background-color: var(--mui-palette-action-hover);
+  border: none;
+  border-bottom: 1px solid transparent;
+  color: var(--mui-palette-text-primary);
+  text-align: left;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.browser-trace-open .browser-trace-header {
+  border-bottom-color: var(--mui-palette-divider);
+}
+
+.browser-trace-header:hover {
+  background-color: var(--mui-palette-action-selected);
+}
+
+.browser-trace-header:focus-visible {
+  outline: 2px solid var(--mui-palette-primary-main);
+  outline-offset: -2px;
+}
+
+.browser-trace-caret {
+  color: var(--mui-palette-text-secondary);
+  transform: rotate(-90deg);
+  transition: transform 120ms ease-out;
+}
+
+.browser-trace-caret-open {
+  transform: rotate(0deg);
+}
+
+.browser-trace-title {
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+  white-space: nowrap;
+}
+
+.browser-trace-meta {
+  flex: 1 1 auto;
+  color: var(--mui-palette-text-secondary);
+  font-size: 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browser-trace-running-dot {
+  flex-shrink: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--mui-palette-primary-main);
+  animation: browser-trace-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes browser-trace-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.browser-trace-body {
+  padding: 8px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--mui-palette-background-paper);
+}
+
+.browser-trace-trailing-reasoning {
+  padding: 6px 10px;
+  color: var(--mui-palette-text-secondary);
+  font-size: 0.8125rem;
+  font-style: italic;
+  line-height: 1.55;
+  border-left: 2px solid var(--mui-palette-divider);
+  white-space: pre-wrap;
+}

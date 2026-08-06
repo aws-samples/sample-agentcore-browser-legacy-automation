@@ -1,0 +1,92 @@
+# =============================================================================
+# Browser Agent — Example Terraform Variables
+# =============================================================================
+# Copy this to user-terraform.tfvars and fill in your values:
+#   cp terraform.tfvars.example user-terraform.tfvars
+#
+# Then deploy:
+#   terraform init
+#   terraform plan  -var-file=user-terraform.tfvars
+#   terraform apply -var-file=user-terraform.tfvars
+# =============================================================================
+
+# ----------------------------------------------------------
+#                Common Variables (REQUIRED)
+# ----------------------------------------------------------
+aws_account_id     = "YOUR_AWS_ACCOUNT_ID"
+aws_region         = "us-west-2"
+aws_profile        = "YOUR_AWS_PROFILE"
+execution_role_arn = "arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/agentcore-role"
+
+# ----------------------------------------------------------
+#                Agent Configuration
+# ----------------------------------------------------------
+agent_name        = "browser_agent"
+agent_description = "Browser automation agent — Strands-based browser control with HITL, session management, and screenshot streaming"
+environment       = "dev"
+
+# ----------------------------------------------------------
+#                Container Configuration
+# ----------------------------------------------------------
+ecr_repository_name = "browser-agent-container"
+image_tag           = "linux-arm64"
+
+# ----------------------------------------------------------
+#                Network Configuration
+# ----------------------------------------------------------
+network_mode    = "PUBLIC"
+server_protocol = "HTTP"
+
+# ----------------------------------------------------------
+#                JWT Authorization Configuration
+# ----------------------------------------------------------
+# JWT is enabled by default. Set to false to disable.
+enable_jwt_authorizer = true
+
+# OIDC discovery URL from your identity provider
+jwt_discovery_url = "https://YOUR_IDP_DOMAIN/.well-known/openid-configuration"
+
+# API audience identifier for the browser agent's inbound JWT validation
+jwt_allowed_audience = ["https://YOUR_API_AUDIENCE"]
+
+# Allowed client IDs — validated against the client_id claim in the JWT token.
+# For Okta: add a custom claim (name: client_id, value: app.clientId) to the authorization server.
+# For Cognito: client_id is included by default.
+# For Auth0: use azp via customClaims.
+jwt_allowed_clients = ["YOUR_CLIENT_ID_1", "YOUR_CLIENT_ID_2"]
+
+# ----------------------------------------------------------
+#                Environment Variables
+# ----------------------------------------------------------
+# All environment variables for the AgentCore runtime container.
+# Uses passthrough map pattern — passed directly to the module.
+environment_variables = {
+  # AWS Configuration
+  "AWS_DEFAULT_REGION" = "us-west-2"
+
+  # Logging — MUST disable OTEL auto-instrumentation for AgentCore stdout logging
+  "LOG_LEVEL"                                       = "INFO"
+  "OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED" = "false"
+
+  # Browser Agent Configuration (BA_ prefix)
+  "BA_BROWSER_MODEL_ID"      = "us.anthropic.claude-sonnet-4-5-20250929-v1:0"
+  "BA_SESSION_TIMEOUT"       = "3600"
+  "BA_MAX_STEPS_PER_SESSION" = "100"
+
+  # Session Store Configuration
+  # Options: "memory" (default, local dev), "dynamodb", "s3"
+  "BA_SESSION_STORE_TYPE"   = "memory"
+  # "BA_SESSION_STORE_TABLE"  = "browser-agent-sessions"    # Required when type=dynamodb
+  # "BA_SESSION_STORE_BUCKET" = "amzn-s3-demo-browser-sessions" # Required when type=dynamodb or s3
+  "BA_SESSION_STORE_PREFIX" = "browser-sessions"
+
+  # Session and Screenshot Storage
+  "BA_SESSIONS_DIR" = "sessions"
+
+  # WebSocket Configuration
+  "BA_DISCONNECT_GRACE_SECONDS" = "30"
+  "BA_HITL_TIMEOUT_SECONDS"     = "300"
+
+  # Screenshot pre-signed URL expiry (minutes). Default: 240 (4 hours).
+  "BA_SCREENSHOT_URL_EXPIRY_MINUTES" = "240"
+}

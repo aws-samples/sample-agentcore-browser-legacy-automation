@@ -1,0 +1,129 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * ActionProgress component styles.
+ *
+ * Single-line status chip for a browser-agent action: step tag, status icon,
+ * action type, truncated details, and an optional expand affordance that
+ * reveals the full result inside a scrollable <pre>. Status-specific color
+ * variants are driven by the `browser-action-{running|succeeded|failed}`
+ * class set by the component. All colors route through MUI theme CSS
+ * variables (see ThemeManager.tsx) so chips stay readable in every theme.
+ */
+
+.browser-action-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+  padding: 6px 10px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--mui-palette-text-primary);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 6px;
+  background-color: var(--mui-palette-background-paper);
+}
+
+.browser-action-step {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mui-palette-text-secondary);
+  background-color: var(--mui-palette-action-selected);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.browser-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.browser-action-type {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+}
+
+.browser-action-details {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--mui-palette-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.browser-action-expand {
+  flex-shrink: 0;
+  padding: 0 4px;
+  font-size: 0.875rem;
+  line-height: 1;
+  color: var(--mui-palette-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.browser-action-expand:hover {
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-action-expand:focus-visible {
+  outline: 2px solid var(--mui-palette-primary-main);
+  outline-offset: 1px;
+}
+
+.browser-action-result {
+  flex-basis: 100%;
+  max-height: 220px;
+  margin: 6px 0 0;
+  padding: 8px;
+  overflow: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-action-hover);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ─── Status variants ─────────────────────────────────────────── */
+
+.browser-action-running {
+  border-color: var(--mui-palette-primary-main);
+}
+
+.browser-action-running .browser-action-icon {
+  color: var(--mui-palette-primary-main);
+}
+
+.browser-action-succeeded {
+  border-color: var(--mui-palette-success-main);
+}
+
+.browser-action-succeeded .browser-action-icon {
+  color: var(--mui-palette-success-main);
+}
+
+.browser-action-failed {
+  border-color: var(--mui-palette-error-main);
+}
+
+.browser-action-failed .browser-action-icon {
+  color: var(--mui-palette-error-main);
+}

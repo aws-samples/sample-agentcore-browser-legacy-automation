@@ -1,0 +1,196 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+    {
+      "label": "concierge-ui:build-dev",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build-dev"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          // ============================================================================
+          // Build Configuration
+          // ============================================================================
+          "NODE_ENV": "development",
+
+          // ============================================================================
+          // WebSocket Configuration
+          // ============================================================================
+          // WebSocket URL for AgentCore Runtime connection (MUST include /ws path)
+          // - AgentCore (production): "wss://pd-ac-lb.somewhere.net/ws"
+          // - Local development: "ws://localhost:8081"
+          // - Empty string: No default (must be set via Settings modal)
+          "WEBSOCKET_URL": "wss://your-gateway.example.com/ws",
+
+          // ============================================================================
+          // Authentication Configuration (OIDC — IdP-agnostic)
+          // ============================================================================
+          // OIDC Authority URL (issuer / discovery endpoint base)
+          // Examples:
+          // - Auth0: "https://YOUR_TENANT.auth0.com"
+          // - Okta: "https://dev-12345.okta.com"
+          // - Cognito: "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_XXXXXXXXX"
+          // - Entra ID: "https://login.microsoftonline.com/{tenant-id}/v2.0"
+          "OIDC_AUTHORITY": "https://your-idp.example.com/oauth2/your-server-id",
+
+          // OIDC SPA Client ID (from Identity Provider application)
+          "OIDC_CLIENT_ID": "YOUR_OIDC_CLIENT_ID",
+
+          // API Audience (REQUIRED for Auth0 to return JWT access tokens)
+          // Must match the API identifier in Auth0 and AgentCore jwt_allowed_audience
+          // Leave empty for Okta, Cognito, Entra ID (not required)
+          "OIDC_AUDIENCE": "https://your-api/audience",
+
+          // OAuth scopes (default: "openid profile email")
+          "OIDC_SCOPE": "openid profile email"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "concierge-ui:build-prod",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "build"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          // ============================================================================
+          // Build Configuration
+          // ============================================================================
+          "NODE_ENV": "production",
+
+          // ============================================================================
+          // WebSocket Configuration
+          // ============================================================================
+          // WebSocket URL for AgentCore Runtime connection (MUST include /ws path)
+          // - AgentCore (production): "wss://pd-ac-lb.somewhere.net/ws"
+          // - Local development: "ws://localhost:8081"
+          // - Empty string: No default (must be set via Settings modal)
+          "WEBSOCKET_URL": "wss://your-gateway.example.com/ws",
+
+          // ============================================================================
+          // Authentication Configuration (OIDC — IdP-agnostic)
+          // ============================================================================
+          // OIDC Authority URL (issuer / discovery endpoint base)
+          // Examples:
+          // - Auth0: "https://YOUR_TENANT.auth0.com"
+          // - Okta: "https://dev-12345.okta.com"
+          // - Cognito: "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_XXXXXXXXX"
+          // - Entra ID: "https://login.microsoftonline.com/{tenant-id}/v2.0"
+          "OIDC_AUTHORITY": "https://your-idp.example.com/oauth2/your-server-id",
+
+          // OIDC SPA Client ID (from Identity Provider application)
+          "OIDC_CLIENT_ID": "YOUR_OIDC_CLIENT_ID",
+
+          // API Audience (REQUIRED for Auth0 to return JWT access tokens)
+          // Must match the API identifier in Auth0 and AgentCore jwt_allowed_audience
+          // Leave empty for Okta, Cognito, Entra ID (not required)
+          "OIDC_AUDIENCE": "https://your-api/audience",
+
+          // OAuth scopes (default: "openid profile email")
+          "OIDC_SCOPE": "openid profile email"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "concierge-ui:start-dev",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "start-dev"],
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          // ============================================================================
+          // Build Configuration
+          // ============================================================================
+          "NODE_ENV": "development",
+
+          // ============================================================================
+          // WebSocket Configuration
+          // ============================================================================
+          // WebSocket URL for AgentCore Runtime connection (MUST include /ws path)
+          // - AgentCore (production): "wss://pd-ac-lb.somewhere.net/ws"
+          // - Local development: "ws://localhost:8081"
+          // - Empty string: No default (must be set via Settings modal)
+          "WEBSOCKET_URL": "wss://your-gateway.example.com/ws",
+
+          // ============================================================================
+          // Authentication Configuration (OIDC — IdP-agnostic)
+          // ============================================================================
+          // OIDC Authority URL (issuer / discovery endpoint base)
+          // Examples:
+          // - Auth0: "https://YOUR_TENANT.auth0.com"
+          // - Okta: "https://dev-12345.okta.com"
+          // - Cognito: "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_XXXXXXXXX"
+          // - Entra ID: "https://login.microsoftonline.com/{tenant-id}/v2.0"
+          "OIDC_AUTHORITY": "https://your-idp.example.com/oauth2/your-server-id",
+
+          // OIDC SPA Client ID (from Identity Provider application)
+          "OIDC_CLIENT_ID": "YOUR_OIDC_CLIENT_ID",
+
+          // API Audience (REQUIRED for Auth0 to return JWT access tokens)
+          // Must match the API identifier in Auth0 and AgentCore jwt_allowed_audience
+          // Leave empty for Okta, Cognito, Entra ID (not required)
+          "OIDC_AUDIENCE": "https://your-api/audience",
+
+          // OAuth scopes (default: "openid profile email")
+          "OIDC_SCOPE": "openid profile email"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "concierge-ui:test-unit",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test-unit"],
+      "group": "test",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "concierge-ui:test-watch",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test-unit-watch"],
+      "group": "test",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": false
+      },
+      "problemMatcher": []
+    }
+  ]
+}

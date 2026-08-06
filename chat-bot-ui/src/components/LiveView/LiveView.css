@@ -1,0 +1,105 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * LiveView component styles.
+ *
+ * Toggleable right-side panel that embeds the Amazon DCV viewer via an
+ * <iframe> for real-time browser session visualization. Theme-aware via
+ * MUI CSS variables (see ThemeManager.tsx).
+ */
+
+.browser-live-view {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.browser-live-view-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--mui-palette-text-primary);
+  border-bottom: 1px solid var(--mui-palette-divider);
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-live-view-title {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+}
+
+.browser-live-view-refresh,
+.browser-live-view-open,
+.browser-live-view-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  color: var(--mui-palette-text-primary);
+  text-decoration: none;
+  background-color: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.browser-live-view-refresh:hover,
+.browser-live-view-open:hover {
+  background-color: var(--mui-palette-action-hover);
+  border-color: var(--mui-palette-primary-main);
+}
+
+.browser-live-view-open {
+  color: var(--mui-palette-primary-main);
+}
+
+.browser-live-view-close {
+  margin-left: auto;
+  padding: 4px 6px;
+}
+
+.browser-live-view-close:hover {
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-live-view-refresh:focus-visible,
+.browser-live-view-open:focus-visible,
+.browser-live-view-close:focus-visible {
+  outline: 2px solid var(--mui-palette-primary-main);
+  outline-offset: 1px;
+}
+
+.browser-live-view-iframe {
+  flex: 1 1 auto;
+  width: 100%;
+  border: 0;
+  background-color: var(--mui-palette-background-default);
+}
+
+.browser-live-view-empty {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-size: 0.875rem;
+  color: var(--mui-palette-text-secondary);
+  background-color: var(--mui-palette-background-paper);
+}

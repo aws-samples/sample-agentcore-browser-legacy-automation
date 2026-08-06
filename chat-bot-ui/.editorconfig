@@ -1,0 +1,35 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+# EditorConfig is awesome: http://EditorConfig.org
+# EditorConfig helps maintain consistent coding styles for multiple developers
+# working on the same project across various editors and IDEs.
+
+root = true
+
+# Apply to all files
+[*]
+end_of_line = lf              # Use Unix-style line endings
+trim_trailing_whitespace = true # Remove trailing whitespace
+insert_final_newline = true   # Ensure file ends with a newline
+indent_style = space          # Use spaces for indentation
+indent_size = 2               # 2 spaces for indentation
+
+# JavaScript, TypeScript, JSX, TSX files
+[*.{js,jsx,ts,tsx}]
+indent_style = space
+indent_size = 2
+
+# JSON and YAML files
+[*.{json,yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# Markdown files - don't trim trailing whitespace (needed for line breaks)
+[*.md]
+trim_trailing_whitespace = false
+
+# Shell scripts
+[*.sh]
+indent_style = space
+indent_size = 4

@@ -1,0 +1,21 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * AgentContent — wrapper styles.
+ *
+ * Layout is driven by MUI `sx` on the component; this stylesheet exists so
+ * the colocated pattern stays consistent with sibling components and to
+ * give downstream consumers a stable hook class name (`.agent-content`)
+ * for overrides.
+ */
+
+.agent-content {
+  position: relative;
+}
+
+.agent-content--loading {
+  font-style: italic;
+}

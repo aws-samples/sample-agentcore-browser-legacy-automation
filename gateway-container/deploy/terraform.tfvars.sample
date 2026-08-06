@@ -1,0 +1,65 @@
+# Concierge Gateway Container — Sample Terraform Variables
+# Copy to terraform.tfvars and update with your values:
+#   cp terraform.tfvars.sample terraform.tfvars
+
+# ============================================================================
+# AWS Configuration
+# ============================================================================
+
+aws_region     = "us-west-2"
+aws_profile    = "demo"
+aws_account_id = "123456789012"
+
+# ============================================================================
+# Container Configuration
+# ============================================================================
+
+ecr_repository_name = "gateway-container"
+image_tag           = "latest"
+container_name      = "concierge-gateway"
+task_family         = "concierge-gateway"
+task_role_name      = "concierge-gateway-role"
+
+# ============================================================================
+# Networking — Update with your VPC resources
+# ============================================================================
+
+vpc_id             = "vpc-0123456789abcdef0"
+subnet_ids         = ["subnet-private-1a", "subnet-private-1b"]
+security_group_ids = ["sg-ecs-tasks"]
+
+# ALB requires at least 2 subnets in different AZs
+alb_subnets            = ["subnet-public-1a", "subnet-public-1b"]
+alb_security_group_ids = ["sg-alb-ingress"]
+
+# ============================================================================
+# TLS — ACM certificate for ALB HTTPS listener
+# ============================================================================
+
+certificate_arn = "arn:aws:acm:us-west-2:123456789012:certificate/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+
+# ============================================================================
+# Environment Variables — Passthrough map pattern
+# ============================================================================
+
+environment_variables = {
+  CONCIERGE_AGENTCORE_ENDPOINT = "bedrock-agentcore.us-west-2.amazonaws.com"
+  CONCIERGE_AGENT_ARN          = "arn%3Aaws%3Abedrock-agentcore%3Aus-west-2%3A123456789012%3Aruntime%2Fconcierge-id"
+  INTERVIEW_AGENTCORE_ENDPOINT = "bedrock-agentcore.us-west-2.amazonaws.com"
+  INTERVIEW_AGENT_ARN          = "arn%3Aaws%3Abedrock-agentcore%3Aus-west-2%3A123456789012%3Aruntime%2Finterview-id"
+  BROWSER_AGENTCORE_ENDPOINT   = "bedrock-agentcore.us-west-2.amazonaws.com"
+  BROWSER_AGENT_ARN            = "arn%3Aaws%3Abedrock-agentcore%3Aus-west-2%3A123456789012%3Aruntime%2Fbrowser-agent-id"
+}
+
+# ============================================================================
+# Environment Tag
+# ============================================================================
+
+environment = "dev"
+
+# ============================================================================
+# Networking Options
+# ============================================================================
+
+# Required when subnets do not auto-assign public IPs and tasks need internet access
+assign_public_ip = false

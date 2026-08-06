@@ -1,0 +1,52 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * FinalAnswer component styles.
+ *
+ * Renders the synthesized STREAM answer in a distinct card with a subtle
+ * primary-accent left border so it reads as a separate element from the
+ * reasoning trace above it.
+ */
+
+.browser-final-answer {
+  margin: 6px 0 10px;
+  padding: 10px 14px 4px;
+  border: 1px solid var(--mui-palette-divider);
+  border-left: 3px solid var(--mui-palette-primary-main);
+  border-radius: 8px;
+  background-color: var(--mui-palette-background-paper);
+}
+
+.browser-final-answer-label {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 2px 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mui-palette-primary-main);
+  background-color: transparent;
+  border: 1px solid var(--mui-palette-primary-main);
+  border-radius: 4px;
+}
+
+.browser-final-answer-body {
+  /* ChatMessage renders its own padding/background — but its default
+     assistant bubble has a backdrop that would double-up with the card
+     we're wrapping it in. Override by relaxing those visuals for the
+     inner bubble. */
+  display: flex;
+  flex-direction: column;
+}
+
+.browser-final-answer-body .chat-message,
+.browser-final-answer-body .chat-message-content {
+  /* Keep whatever ChatMessage class names exist; no forced overrides
+     beyond removing the extra margin since we already own the outer
+     padding. */
+  margin: 0;
+}

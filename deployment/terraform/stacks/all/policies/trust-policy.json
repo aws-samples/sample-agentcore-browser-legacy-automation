@@ -1,0 +1,13 @@
+{
+  "_comment": "Policy rationale: Bedrock AgentCore trust policy — the runtime service (bedrock-agentcore.amazonaws.com) assumes this role to execute the browser agent container. Consumed by the iam module via principal_name; retained here for reference and hand-applied role creation.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "bedrock-agentcore.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}

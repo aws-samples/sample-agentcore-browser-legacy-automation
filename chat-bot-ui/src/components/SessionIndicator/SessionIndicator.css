@@ -1,0 +1,84 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * SessionIndicator component styles.
+ *
+ * Top-of-chat status bar shown while a browser agent session is active.
+ * Horizontally aligns a region label, step counter chip, and two action
+ * buttons (Stop, Live view). Colors drive from MUI theme CSS variables
+ * (see ThemeManager.tsx) so the bar stays readable across every theme
+ * (light / dark / blue / high-contrast / auto).
+ */
+
+.browser-session-indicator {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--mui-palette-text-primary);
+  border: 1px solid var(--mui-palette-primary-main);
+  border-radius: 6px;
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-session-label {
+  flex-shrink: 0;
+  font-weight: 600;
+  color: var(--mui-palette-text-primary);
+}
+
+.browser-session-step {
+  flex-shrink: 0;
+  padding: 1px 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--mui-palette-text-secondary);
+  background-color: var(--mui-palette-action-selected);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.browser-session-stop,
+.browser-session-live-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-background-paper);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.browser-session-stop {
+  margin-left: auto;
+  color: var(--mui-palette-error-main);
+  border-color: var(--mui-palette-error-main);
+  background-color: transparent;
+}
+
+.browser-session-stop:hover {
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-session-live-view:hover {
+  background-color: var(--mui-palette-action-hover);
+  border-color: var(--mui-palette-primary-main);
+}
+
+.browser-session-stop:focus-visible,
+.browser-session-live-view:focus-visible {
+  outline: 2px solid var(--mui-palette-primary-main);
+  outline-offset: 1px;
+}

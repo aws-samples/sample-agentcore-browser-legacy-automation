@@ -1,0 +1,176 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "gateway:docker:build-ecr",
+      "type": "shell",
+      "command": "./scripts/docker_build_ecr.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "AWS_ACCOUNT_ID": "${input:awsAccountId}",
+          "AWS_REGION": "${input:awsRegion}",
+          "AWS_PROFILE": "${input:awsProfile}",
+          "ECR_REPOSITORY_NAME": "gateway-container",
+          "IMAGE_TAG": "latest"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:docker:push-ecr",
+      "type": "shell",
+      "command": "./scripts/docker_push_ecr.sh",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "AWS_ACCOUNT_ID": "${input:awsAccountId}",
+          "AWS_REGION": "${input:awsRegion}",
+          "AWS_PROFILE": "${input:awsProfile}",
+          "ECR_REPOSITORY_NAME": "gateway-container",
+          "IMAGE_TAG": "latest"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:ecs:deploy",
+      "type": "shell",
+      "command": "./scripts/deploy_ecs.sh",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PLAN_ONLY": "${input:planOnly}",
+          "TF_TOKEN_gitlab_aws_dev": "${input:scmTokenSecret}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:terraform:init",
+      "type": "shell",
+      "command": "terraform init",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:terraform:plan",
+      "type": "shell",
+      "command": "terraform plan -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:terraform:apply",
+      "type": "shell",
+      "command": "terraform apply -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "gateway:terraform:destroy",
+      "type": "shell",
+      "command": "terraform destroy -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "awsRegion",
+      "type": "promptString",
+      "description": "AWS Region",
+      "default": "us-west-2"
+    },
+    {
+      "id": "awsAccountId",
+      "type": "promptString",
+      "description": "AWS Account ID (12 digits)",
+      "default": ""
+    },
+    {
+      "id": "awsProfile",
+      "type": "promptString",
+      "description": "AWS Profile Name",
+      "default": "demo"
+    },
+    {
+      "id": "scmTokenSecret",
+      "type": "promptString",
+      "description": "GitLab Token Secret for Terraform module registry",
+      "default": ""
+    },
+    {
+      "id": "planOnly",
+      "type": "pickString",
+      "description": "Plan only (skip apply)?",
+      "options": ["false", "true"],
+      "default": "false"
+    }
+  ]
+}

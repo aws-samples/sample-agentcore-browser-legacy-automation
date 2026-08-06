@@ -1,0 +1,8 @@
+{
+  "short_name": "Browser Agent",
+  "name": "Browser Agent UI",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#1976d2",
+  "background_color": "#ffffff"
+}

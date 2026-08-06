@@ -1,0 +1,22 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+# node_modules and webpack generated files
+node_modules/
+dist/
+build/
+
+# webpack configuration files
+*.config.js
+webpack.*.js
+
+# minified files
+*.min.js
+*.min.css
+
+# coverage reports
+coverage/
+
+# temporary files
+*.tmp
+*.temp

@@ -1,0 +1,24 @@
+{
+  "_comment": "Policy rationale: read/write/list access on the S3 session bucket for BrowserStreamer persistence. Resource ARN is templated at apply time from the session_bucket_name variable.",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "BrowserSessionObjects",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": "arn:aws:s3:::${bucket_name}/*"
+    },
+    {
+      "Sid": "BrowserSessionBucketList",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListBucket"
+      ],
+      "Resource": "arn:aws:s3:::${bucket_name}"
+    }
+  ]
+}

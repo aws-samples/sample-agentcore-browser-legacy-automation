@@ -1,0 +1,252 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/*
+ * StepCard component styles.
+ *
+ * One collapsible card per agent step. Colored left border reflects status
+ * (success = green, failure = red, running = primary, waiting = warning,
+ * screenshot = neutral). Typography emphasizes the kind + summary in the
+ * header row, with reasoning rendered in muted italic text in the body.
+ *
+ * All colors route through MUI theme CSS variables (see ThemeManager.tsx)
+ * so the card stays readable across every theme.
+ */
+
+.browser-step {
+  border: 1px solid var(--mui-palette-divider);
+  border-left: 3px solid var(--mui-palette-divider);
+  border-radius: 6px;
+  background-color: var(--mui-palette-background-paper);
+  margin: 6px 0;
+  overflow: hidden;
+  transition: border-color 120ms ease-out;
+}
+
+.browser-step-head {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--mui-palette-text-primary);
+  text-align: left;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.browser-step-head:disabled {
+  cursor: default;
+}
+
+.browser-step-head:hover:not(:disabled) {
+  background-color: var(--mui-palette-action-hover);
+}
+
+.browser-step-head:focus-visible {
+  outline: 2px solid var(--mui-palette-primary-main);
+  outline-offset: -2px;
+}
+
+.browser-step-num {
+  padding: 1px 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--mui-palette-text-secondary);
+  background-color: var(--mui-palette-action-selected);
+  border-radius: 4px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  min-width: 56px;
+  text-align: center;
+}
+
+.browser-step-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.browser-step-kind {
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background-color: var(--mui-palette-action-hover);
+  color: var(--mui-palette-text-primary);
+  white-space: nowrap;
+}
+
+.browser-step-summary {
+  font-size: 0.8125rem;
+  color: var(--mui-palette-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.browser-step-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--mui-palette-text-secondary);
+}
+
+.browser-step-caret {
+  color: var(--mui-palette-text-secondary);
+  transition: transform 120ms ease-out;
+}
+
+.browser-step-caret-open {
+  transform: rotate(180deg);
+}
+
+.browser-step-body {
+  padding: 4px 12px 12px;
+  border-top: 1px solid var(--mui-palette-divider);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.browser-step-reasoning {
+  padding: 4px 0 4px 10px;
+  border-left: 2px solid var(--mui-palette-divider);
+  color: var(--mui-palette-text-secondary);
+  font-size: 0.8125rem;
+  font-style: italic;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.browser-step-reasoning::before {
+  content: '🧠 ';
+  margin-right: 2px;
+  font-style: normal;
+}
+
+.browser-step-screenshot-wrap {
+  /* Keep the Screenshot component inline — the Screenshot component
+     brings its own styling (figure + caption). We just constrain the
+     width so the thumbnail stays modest (≈ 240 px target). */
+  max-width: 260px;
+}
+
+.browser-step-result {
+  max-height: 180px;
+  margin: 0;
+  padding: 8px;
+  overflow: auto;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.75rem;
+  color: var(--mui-palette-text-primary);
+  background-color: var(--mui-palette-action-hover);
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ── HITL block ────────────────────────────────────────────── */
+
+.browser-step-hitl {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background-color: var(--mui-palette-action-hover);
+  border: 1px solid var(--mui-palette-warning-main);
+  border-radius: 6px;
+}
+
+.browser-step-hitl-question {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--mui-palette-text-primary);
+}
+
+.browser-step-hitl-screenshot {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--mui-palette-divider);
+  border-radius: 4px;
+}
+
+.browser-step-hitl-context {
+  font-size: 0.8125rem;
+  color: var(--mui-palette-text-secondary);
+  line-height: 1.45;
+  white-space: pre-wrap;
+}
+
+.browser-step-hitl-status {
+  align-self: flex-start;
+  padding: 2px 8px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--mui-palette-warning-main);
+  border: 1px solid var(--mui-palette-warning-main);
+}
+
+.browser-step-hitl-status[data-status='responded'] {
+  color: var(--mui-palette-success-main);
+  border-color: var(--mui-palette-success-main);
+}
+
+.browser-step-hitl-status[data-status='timeout'] {
+  color: var(--mui-palette-error-main);
+  border-color: var(--mui-palette-error-main);
+}
+
+/* ── Status accent colors ──────────────────────────────────── */
+
+.browser-step-succeeded {
+  border-left-color: var(--mui-palette-success-main);
+}
+
+.browser-step-succeeded .browser-step-status {
+  color: var(--mui-palette-success-main);
+}
+
+.browser-step-failed {
+  border-left-color: var(--mui-palette-error-main);
+}
+
+.browser-step-failed .browser-step-status {
+  color: var(--mui-palette-error-main);
+}
+
+.browser-step-running {
+  border-left-color: var(--mui-palette-primary-main);
+}
+
+.browser-step-running .browser-step-status {
+  color: var(--mui-palette-primary-main);
+}
+
+.browser-step-waiting-for-user {
+  border-left-color: var(--mui-palette-warning-main);
+}
+
+.browser-step-waiting-for-user .browser-step-status {
+  color: var(--mui-palette-warning-main);
+}
+
+.browser-step-screenshot {
+  border-left-color: var(--mui-palette-text-secondary);
+}

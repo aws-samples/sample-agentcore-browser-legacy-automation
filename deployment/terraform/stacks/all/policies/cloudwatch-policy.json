@@ -1,0 +1,62 @@
+{
+  "_comment": "Policy rationale: allows the runtime to create log groups + streams + put log events for application/usage/endpoint logs, emit CloudWatch metrics scoped to the bedrock-agentcore namespace, and export X-Ray traces (OpenTelemetry).",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:*:*:log-group:/aws/bedrock-agentcore/runtimes/*",
+        "arn:aws:logs:*:*:log-group:/aws/vendedlogs/bedrock-agentcore/runtime/APPLICATION_LOGS/*",
+        "arn:aws:logs:*:*:log-group:/aws/vendedlogs/bedrock-agentcore/runtime/USAGE_LOGS/*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:PutDeliverySource",
+        "logs:PutDeliveryDestination",
+        "logs:CreateDelivery",
+        "logs:GetDeliverySource",
+        "logs:DeleteDeliverySource",
+        "logs:DeleteDeliveryDestination"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:DescribeLogGroups"
+      ],
+      "Resource": "arn:aws:logs:*:*:log-group:*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:PutMetricData"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "cloudwatch:namespace": "bedrock-agentcore"
+        }
+      }
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords",
+        "xray:GetSamplingRules",
+        "xray:GetSamplingTargets"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

@@ -1,0 +1,281 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "browser-agent:docker:build-ecr",
+      "type": "shell",
+      "command": "./scripts/docker_build_ecr.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "AWS_ACCOUNT_ID": "${input:awsAccountId}",
+          "AWS_REGION": "${input:awsRegion}",
+          "AWS_PROFILE": "${input:awsProfile}",
+          "ECR_REPOSITORY_NAME": "browser-agent-container",
+          "IMAGE_TAG": "linux-arm64",
+          "PLATFORM": "linux/arm64",
+          "SCM_TOKEN_NAME": "${input:scmTokenName}",
+          "SCM_TOKEN_SECRET": "${input:scmTokenSecret}",
+          "EXTRA_INDEX_URLS": "${input:extraIndexUrls}",
+          "TRUSTED_HOSTS": "${input:trustedHosts}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:docker:push-ecr",
+      "type": "shell",
+      "command": "./scripts/docker_push_ecr.sh",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "AWS_ACCOUNT_ID": "${input:awsAccountId}",
+          "AWS_REGION": "${input:awsRegion}",
+          "AWS_PROFILE": "${input:awsProfile}",
+          "ECR_REPOSITORY_NAME": "browser-agent-container",
+          "IMAGE_TAG": "linux-arm64",
+          "PLATFORM": "linux/arm64"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:agentcore:deploy",
+      "type": "shell",
+      "command": "./scripts/deploy_agentcore.sh",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "PLAN_ONLY": "${input:planOnly}",
+          "TF_TOKEN_gitlab_aws_dev": "${input:scmTokenSecret}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:terraform:init",
+      "type": "shell",
+      "command": "terraform init",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy/agentcore",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:terraform:plan",
+      "type": "shell",
+      "command": "terraform plan -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy/agentcore",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:terraform:apply",
+      "type": "shell",
+      "command": "terraform apply -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy/agentcore",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:terraform:destroy",
+      "type": "shell",
+      "command": "terraform destroy -var-file=user-terraform.tfvars",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}/deploy/agentcore",
+        "env": {
+          "AWS_PROFILE": "${input:awsProfile}"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "browser-agent:server:run-local",
+      "detail": "Run the browser-agent Starlette/uvicorn server locally on :8081 for end-to-end smoke testing. Defaults to S3 storage so the UI gets real pre-signed screenshot URLs (LocalScreenshotStorage would emit an empty screenshotUrl). Requires AWS credentials with Bedrock + AgentCore Browser + S3 access via the chosen AWS_PROFILE.",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "source .venv/bin/activate && PYTHONPATH=src PORT=8081 python src/server.py"
+      ],
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          // ========================================================
+          // AWS Configuration — supplied via task prompts
+          // ========================================================
+          "AWS_PROFILE": "${input:awsProfile}",
+          "AWS_REGION": "${input:awsRegion}",
+          "AWS_DEFAULT_REGION": "${input:awsRegion}",
+
+          // ========================================================
+          // Browser Agent — Model + Session Lifecycle (BA_ prefix)
+          // ========================================================
+          // Bedrock model ID used by the Strands Agent (cross-region inference profile).
+          "BA_BROWSER_MODEL_ID": "us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+
+          // Browser microVM session TTL (seconds).
+          "BA_SESSION_TIMEOUT": "3600",
+
+          // Max agent steps per browser session.
+          "BA_MAX_STEPS_PER_SESSION": "100",
+
+          // Grace period after client disconnect before terminating the browser session.
+          "BA_DISCONNECT_GRACE_SECONDS": "30",
+
+          // Timeout for pending HITL prompts before auto-cancel.
+          "BA_HITL_TIMEOUT_SECONDS": "300",
+
+          // Pre-signed S3 screenshot URL lifetime (minutes; default 240 = 4h).
+          "BA_SCREENSHOT_URL_EXPIRY_MINUTES": "240",
+
+          // ========================================================
+          // Session + Screenshot Storage
+          //
+          // Options:
+          //   - memory    → LocalScreenshotStorage (writes to BA_SESSIONS_DIR on disk,
+          //                 emits empty screenshotUrl, UI renders empty <img>).
+          //   - s3        → S3ScreenshotStorage (screenshots) + S3SessionStore (session records).
+          //                 Requires BA_SESSION_STORE_BUCKET. Recommended for local smoke.
+          //   - dynamodb  → S3ScreenshotStorage (screenshots) + DdbSessionStore (session records).
+          //                 Requires BA_SESSION_STORE_BUCKET + BA_SESSION_STORE_TABLE.
+          // ========================================================
+          "BA_SESSION_STORE_TYPE": "s3",
+
+          // S3 bucket that holds session records (when type=s3) and screenshots.
+          // Replace with your own bucket name.
+          "BA_SESSION_STORE_BUCKET": "<your-session-bucket>",
+
+          // Key prefix for S3 / DDB keys under the bucket.
+          "BA_SESSION_STORE_PREFIX": "browser-sessions",
+
+          // DynamoDB table — only read when BA_SESSION_STORE_TYPE=dynamodb.
+          "BA_SESSION_STORE_TABLE": "<your-session-table>",
+
+          // Local fallback dir used when BA_SESSION_STORE_TYPE=memory.
+          "BA_SESSIONS_DIR": "sessions",
+
+          // ========================================================
+          // Logging
+          // ========================================================
+          "LOG_LEVEL": "DEBUG"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "awsRegion",
+      "type": "promptString",
+      "description": "AWS Region",
+      "default": "us-west-2"
+    },
+    {
+      "id": "awsAccountId",
+      "type": "promptString",
+      "description": "AWS Account ID (12 digits)",
+      "default": ""
+    },
+    {
+      "id": "awsProfile",
+      "type": "promptString",
+      "description": "AWS Profile Name",
+      "default": "demo"
+    },
+    {
+      "id": "scmTokenName",
+      "type": "promptString",
+      "description": "GitLab Token Name for private package registry",
+      "default": "langmesh-token"
+    },
+    {
+      "id": "scmTokenSecret",
+      "type": "promptString",
+      "description": "GitLab Token Secret for private package registry",
+      "default": ""
+    },
+    {
+      "id": "extraIndexUrls",
+      "type": "promptString",
+      "description": "Extra pip index URLs (comma-separated)",
+      "default": ""
+    },
+    {
+      "id": "trustedHosts",
+      "type": "promptString",
+      "description": "Trusted hosts for pip (comma-separated)",
+      "default": ""
+    },
+    {
+      "id": "planOnly",
+      "type": "pickString",
+      "description": "Plan only (skip apply)?",
+      "options": ["false", "true"],
+      "default": "false"
+    }
+  ]
+}

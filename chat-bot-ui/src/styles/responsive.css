@@ -1,0 +1,302 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/**
+ * Responsive Design Styles for the Browser Agent UI
+ * Implements mobile and tablet responsive layouts with touch-friendly interfaces
+ */
+
+/* Responsive Breakpoints - Using direct values instead of unused custom properties */
+
+/* Base responsive layout adjustments */
+.main-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: margin-left 0.3s ease;
+}
+
+/* Tablet and Desktop Layout (769px+) - Unified layout for all non-mobile screens */
+@media (min-width: 769px) {
+  .main-content-area {
+    /* Allow JavaScript to control margin, ensure smooth transitions */
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .collapsible-sidebar {
+    position: fixed;
+    z-index: 1300;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, width;
+  }
+
+  .collapsible-sidebar.expanded {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+    transform: translateX(0);
+  }
+
+  .collapsible-sidebar.collapsed {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    transform: translateX(0);
+  }
+
+  /* Overlay for expanded sidebar on tablet */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1250;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* User controls adjustments */
+  .sidebar-user-controls {
+    padding: 16px;
+  }
+}
+
+/* Mobile Layout (up to 768px) */
+@media (max-width: 768px) {
+  .main-content-area {
+    /* Allow JavaScript to control margin, ensure smooth transitions */
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .collapsible-sidebar {
+    position: fixed;
+    z-index: 1300;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .collapsible-sidebar.expanded {
+    width: 100vw;
+    min-width: 320px;
+    max-width: 320px;
+    transform: translateX(0);
+  }
+
+  .collapsible-sidebar.collapsed {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    transform: translateX(0);
+  }
+
+  /* Mobile overlay */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1250;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .sidebar-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .folder-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Mobile user controls */
+  .sidebar-user-controls {
+    padding: 16px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  /* Mobile main content adjustments */
+  .main-content-area {
+    padding: 16px;
+  }
+
+  /* Mobile message bubbles */
+  .message-container {
+    padding: 0 16px;
+  }
+
+  .message-bubble {
+    max-width: calc(100% - 32px);
+    margin: 12px 0;
+  }
+
+
+}
+
+/* Extra Small Mobile (up to 480px) */
+@media (max-width: 480px) {
+  .collapsible-sidebar.expanded {
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+  }
+
+  /* Smaller text and spacing */
+  .user-name {
+    font-size: 13px;
+  }
+
+  .user-title {
+    font-size: 11px;
+  }
+}
+
+/* Touch gesture support */
+@media (pointer: coarse) {
+
+  /* Increase touch targets for coarse pointers (touch devices) */
+  .MuiButton-root,
+  .MuiIconButton-root {
+    min-height: 48px;
+  }
+
+  /* Larger tap areas for small interactive elements */
+  .MuiIconButton-root {
+    padding: 12px;
+  }
+}
+
+/* Landscape orientation adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .collapsible-sidebar.expanded {
+    width: 50vw;
+    max-width: 400px;
+  }
+
+}
+
+/* High DPI display adjustments */
+@media (-webkit-min-device-pixel-ratio: 2),
+(min-resolution: 192dpi) {
+
+  .folder-icon {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Accessibility: Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .collapsible-sidebar,
+  .main-content-area,
+  .sidebar-overlay {
+    transition: none !important;
+  }
+}
+
+/* Accessibility: High contrast support */
+@media (prefers-contrast: high) {
+  .sidebar-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .collapsible-sidebar {
+    border-right: 2px solid var(--border-color);
+  }
+
+  .sidebar-nav-item.selected {
+    border-left: 4px solid var(--accent-primary);
+  }
+}
+
+/* Print styles - hide sidebar and optimize layout */
+@media print {
+  .collapsible-sidebar {
+    display: none !important;
+  }
+
+  .main-content-area {
+    margin-left: 0 !important;
+  }
+
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* Ensure proper stacking context */
+.collapsible-sidebar {
+  z-index: 1300;
+}
+
+.sidebar-overlay {
+  z-index: 1250;
+}
+
+.main-content-area {
+  z-index: 1;
+}
+
+/* Prevent layout shifts during responsive transitions */
+.main-layout {
+  contain: layout;
+}
+
+.main-content-area {
+  contain: layout;
+}
+
+/* Ensure consistent sidebar positioning for default layout */
+
+/* Fix potential gaps in transition states */
+.collapsible-sidebar,
+.main-content-area {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* Ensure smooth width transitions without content jumping */
+.collapsible-sidebar .MuiList-root {
+  overflow: hidden;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapsible-sidebar.collapsed .MuiList-root {
+  opacity: 1;
+}
+
+.collapsible-sidebar.expanded .MuiList-root {
+  opacity: 1;
+}
+
+/* Smooth scrolling for mobile */

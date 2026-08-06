@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.coverage
+htmlcov/
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+
+# Environment
+.env
+.env.*
+# Tracked placeholder templates (override the broad .env.* rule above)
+!.env.sample
+!.env.example
+!**/.env.sample
+!**/.env.example
+
+# Testing
+.pytest_cache/
+.hypothesis/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# SSL certificates (local dev)
+nginx/ssl/*.pem
+nginx/ssl/*.key
+nginx/ssl/*.crt
+
+# Terraform
+deploy/terraform.tfvars
+deploy/user-terraform.tfvars
+deploy/terraform.tfstate
+deploy/terraform.tfstate.*
+deploy/.terraform/
+deploy/.terraform.lock.hcl
+**/.terraform.lock.hcl
+
+# Project
+*.log
+*.tmp
+*.temp
+*.tar.gz
+*.zip
+
+# VS Code tasks.json contains deployment-specific values — use tasks.json.example
+.vscode/tasks.json

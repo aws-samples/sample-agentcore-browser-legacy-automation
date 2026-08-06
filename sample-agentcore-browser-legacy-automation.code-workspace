@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"name": "root",
+			"path": "."
+		},
+		{
+			"path": "browser-agent-container"
+		},
+		{
+			"path": "gateway-container"
+		},
+		{
+			"path": "chat-bot-ui"
+		},
+		{
+			"path": "deployment"
+		}
+	]
+}

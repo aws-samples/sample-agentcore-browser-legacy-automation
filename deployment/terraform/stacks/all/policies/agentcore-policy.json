@@ -1,0 +1,18 @@
+{
+  "_comment": "Policy rationale: grants the AgentCore Runtime the workload-identity token actions required by the Cognito JWT inbound authorizer, scoped to the default workload-identity directory. Browser-tool actions (CreateBrowser, StartBrowserSession, Connect*Stream, ...) are granted separately in browser-policy.json, and logs/metrics/traces in cloudwatch-policy.json. GetWorkloadAccessTokenForUserId is intentionally omitted: it issues a workload token from a caller-supplied user id without verifying a JWT, which AWS recommends against for JWT-based runtimes (see https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-permissions.html).",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AllowWorkloadIdentityAccess",
+      "Effect": "Allow",
+      "Action": [
+        "bedrock-agentcore:GetWorkloadAccessToken",
+        "bedrock-agentcore:GetWorkloadAccessTokenForJWT"
+      ],
+      "Resource": [
+        "arn:aws:bedrock-agentcore:*:*:workload-identity-directory/default",
+        "arn:aws:bedrock-agentcore:*:*:workload-identity-directory/default/workload-identity/*"
+      ]
+    }
+  ]
+}

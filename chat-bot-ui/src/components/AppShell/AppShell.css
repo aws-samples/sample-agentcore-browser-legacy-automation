@@ -1,0 +1,266 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/**
+ * AppShell Layout Styles
+ *
+ * Absorbs relevant styles from deprecated CollapsibleSidebar.css and
+ * MainContentArea.css. Provides sidebar positioning, collapse/expand
+ * animations, mobile overlay, scrollable area, and skip-to-main styles.
+ *
+ */
+
+/* Import responsive breakpoint utilities */
+@import '../../styles/responsive.css';
+
+/* -----------------------------------------------------------------------
+   App Shell — root container
+   ----------------------------------------------------------------------- */
+
+.app-shell {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  contain: layout;
+}
+
+/* -----------------------------------------------------------------------
+   Sidebar
+   ----------------------------------------------------------------------- */
+
+.app-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  background-color: var(--bg-secondary, #ffffff);
+  border-right: 1px solid var(--border-color, #e0e0e0);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1300;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  will-change: width, transform;
+}
+
+.app-sidebar.collapsed {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+}
+
+.app-sidebar.expanded {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+}
+
+/* Text labels fade out when collapsed */
+.app-sidebar .MuiListItemText-root {
+  opacity: 1;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-sidebar.collapsed .MuiListItemText-root {
+  opacity: 0;
+  transition: opacity 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Icon margin adjusts on collapse */
+.app-sidebar .MuiListItemIcon-root {
+  transition: margin-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-sidebar.collapsed .MuiListItemIcon-root {
+  margin-right: 0;
+}
+
+.app-sidebar.expanded .MuiListItemIcon-root {
+  margin-right: 24px;
+}
+
+
+/* -----------------------------------------------------------------------
+   Sidebar footer
+   ----------------------------------------------------------------------- */
+
+.sidebar-footer {
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  padding: 8px;
+}
+
+/* -----------------------------------------------------------------------
+   Main content area
+   ----------------------------------------------------------------------- */
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
+  will-change: margin-left;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+/* -----------------------------------------------------------------------
+   Skip to main content link
+   ----------------------------------------------------------------------- */
+
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  z-index: 9999;
+  transition: top 0.2s ease;
+}
+
+.skip-to-main:focus {
+  top: 6px;
+}
+
+/* -----------------------------------------------------------------------
+   Mobile overlay
+   ----------------------------------------------------------------------- */
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1250;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.sidebar-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* -----------------------------------------------------------------------
+   Responsive — Tablet (769px – 1024px)
+   ----------------------------------------------------------------------- */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .app-sidebar.expanded {
+    width: 280px;
+    min-width: 280px;
+    max-width: 280px;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Responsive — Mobile (up to 768px)
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .app-sidebar.expanded {
+    width: 100vw;
+    min-width: 280px;
+    max-width: 320px;
+  }
+
+  .sidebar-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Responsive — Extra small mobile (up to 480px)
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .app-sidebar.expanded {
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Focus states for accessibility
+   ----------------------------------------------------------------------- */
+
+.app-sidebar button:focus-visible,
+.app-sidebar [role="button"]:focus-visible {
+  outline: 2px solid var(--accent-primary, #1976d2);
+  outline-offset: 2px;
+}
+
+.app-main button:focus-visible,
+.app-main [role="button"]:focus-visible {
+  outline: 2px solid var(--focus-outline, #1976d2);
+  outline-offset: 2px;
+}
+
+/* -----------------------------------------------------------------------
+   Accessibility — Reduced motion
+   ----------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .app-sidebar,
+  .app-main,
+  .sidebar-overlay {
+    transition: none !important;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Accessibility — High contrast
+   ----------------------------------------------------------------------- */
+
+@media (prefers-contrast: high) {
+  .sidebar-overlay {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .app-sidebar {
+    border-right: 2px solid var(--border-color);
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Print — hide sidebar
+   ----------------------------------------------------------------------- */
+
+@media print {
+  .app-sidebar {
+    display: none !important;
+  }
+
+  .app-main {
+    margin-left: 0 !important;
+  }
+
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* -----------------------------------------------------------------------
+   Screen reader only utility
+   ----------------------------------------------------------------------- */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

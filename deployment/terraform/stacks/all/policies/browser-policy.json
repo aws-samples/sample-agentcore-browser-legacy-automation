@@ -1,0 +1,23 @@
+{
+  "_comment": "Policy rationale: grants the AgentCore Runtime access to the Browser tool primitives (create/start/stop browser sessions, connect to live-view and automation streams).",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "bedrock-agentcore:CreateBrowser",
+        "bedrock-agentcore:ListBrowsers",
+        "bedrock-agentcore:GetBrowser",
+        "bedrock-agentcore:DeleteBrowser",
+        "bedrock-agentcore:StartBrowserSession",
+        "bedrock-agentcore:ListBrowserSessions",
+        "bedrock-agentcore:GetBrowserSession",
+        "bedrock-agentcore:StopBrowserSession",
+        "bedrock-agentcore:UpdateBrowserStream",
+        "bedrock-agentcore:ConnectBrowserAutomationStream",
+        "bedrock-agentcore:ConnectBrowserLiveViewStream"
+      ],
+      "Resource": "arn:aws:bedrock-agentcore:*:*:browser/*"
+    }
+  ]
+}

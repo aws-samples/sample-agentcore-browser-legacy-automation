@@ -1,0 +1,247 @@
+/*
+Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+SPDX-License-Identifier: MIT-0
+*/
+
+/**
+ * Accessibility Styles for the Browser Agent UI
+ * Implements keyboard navigation, ARIA support, and high contrast themes
+ */
+
+/* Keyboard Navigation and Focus Management */
+
+/* Enhanced focus indicators */
+:focus-visible {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Skip to main content link */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-paper, #ffffff);
+  color: var(--text-primary, var(--mui-palette-common-black));
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 2px solid var(--border-color, var(--mui-palette-common-black));
+  border-radius: 4px;
+  z-index: 9999;
+  font-weight: 600;
+  transition: top 0.3s ease;
+}
+
+.skip-to-main:focus {
+  top: 6px;
+}
+
+
+
+/* Button accessibility */
+.MuiButton-root:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(25, 118, 210, 0.2);
+}
+
+.MuiIconButton-root:focus-visible {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: 2px;
+  background-color: var(--hover-overlay, rgba(0, 0, 0, 0.04));
+}
+
+/* Form controls accessibility */
+.MuiTextField-root .MuiOutlinedInput-root:focus-within {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: 2px;
+}
+
+.MuiSelect-select:focus-visible {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: 2px;
+}
+
+/* Menu and dropdown accessibility */
+.MuiMenu-paper {
+  /* Ensure menus are keyboard navigable */
+}
+
+.MuiMenuItem-root:focus-visible {
+  outline: 2px solid var(--focus-outline, var(--mui-palette-primary-main));
+  outline-offset: -2px;
+  background-color: var(--hover-overlay, rgba(0, 0, 0, 0.04));
+}
+
+/* Tab navigation order */
+.main-layout {
+  /* Ensure proper tab order throughout the application */
+}
+
+/* ARIA Live Regions */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+
+/* High Contrast Theme - Placeholder for future implementation */
+/* Note: High contrast theme classes removed as they are not currently implemented */
+
+/* Keyboard Shortcuts */
+.keyboard-shortcuts {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-paper, #ffffff);
+  border: 2px solid var(--border-color, var(--mui-palette-common-black));
+  border-radius: 8px;
+  padding: 24px;
+  z-index: 9999;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+
+.keyboard-shortcuts h3 {
+  margin: 0 0 16px 0;
+  color: var(--text-primary, var(--mui-palette-common-black));
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.keyboard-shortcuts ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyboard-shortcuts li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider-color, #e0e0e0);
+}
+
+.keyboard-shortcuts li:last-child {
+  border-bottom: none;
+}
+
+.keyboard-shortcuts .shortcut-key {
+  background: var(--bg-tertiary, #e0e0e0);
+  color: var(--text-primary, var(--mui-palette-common-black));
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border-color, var(--mui-palette-common-black));
+}
+
+.keyboard-shortcuts .shortcut-description {
+  color: var(--text-secondary, #666666);
+  font-size: 14px;
+}
+
+/* Focus trap for modals */
+/* Note: focus-trap classes removed - focus management handled by Material-UI and useKeyboardNavigation hook */
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
+    scroll-behavior: auto !important;
+  }
+
+  .MuiChip-root {
+    animation: none !important;
+  }
+}
+
+/* High Contrast Media Query Support */
+@media (prefers-contrast: high) {
+  :root {
+    --text-primary: var(--mui-palette-common-black);
+    --text-secondary: #333333;
+    --border-color: var(--mui-palette-common-black);
+    --accent-primary: var(--mui-palette-common-black);
+    --focus-outline: var(--mui-palette-common-black);
+  }
+
+  .MuiButton-root {
+    border: 2px solid var(--mui-palette-common-black) !important;
+  }
+}
+
+/* Print Accessibility */
+@media print {
+  .skip-to-main,
+  .keyboard-shortcuts {
+    display: none !important;
+  }
+
+  /* Ensure good contrast for printing */
+  * {
+    color: var(--mui-palette-common-black) !important;
+    background: #ffffff !important;
+  }
+}
+
+/* Touch Device Accessibility */
+@media (pointer: coarse) {
+  /* Larger touch targets for accessibility */
+  .MuiButton-root,
+  .MuiIconButton-root {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Enhanced focus indicators for touch */
+  :focus-visible {
+    outline: 3px solid var(--focus-outline, var(--mui-palette-primary-main));
+    outline-offset: 2px;
+  }
+}
+
+/* Language and Direction Support */
+[dir="rtl"] .collapsible-sidebar {
+  border-right: none;
+  border-left: 1px solid var(--divider-color, #e0e0e0);
+}
+
+/* Error and Status Announcements */
+/* Note: error-announcement and status-announcement classes removed - handled by inline aria-live regions */
+
+/* Ensure interactive elements are properly labeled */
+button:not([aria-label]):not([aria-labelledby]) {
+  /* Warn about missing labels in development */
+}
+
+/* Focus management for dynamic content */
+/* Note: dynamic-content class removed - feature not implemented */
+
+/* Ensure proper heading hierarchy */
+h1, h2, h3, h4, h5, h6 {
+  /* Maintain semantic heading structure */
+}
+
+/* Loading state accessibility */
+/* Note: loading-spinner class removed - loading states handled by Material-UI components */

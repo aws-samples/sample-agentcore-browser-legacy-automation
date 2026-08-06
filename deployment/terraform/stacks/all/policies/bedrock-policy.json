@@ -1,0 +1,17 @@
+{
+  "_comment": "Policy rationale: allows the browser agent to invoke Bedrock foundation models + cross-region inference profiles (required for us.anthropic.* model IDs).",
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream"
+      ],
+      "Resource": [
+        "arn:aws:bedrock:*::foundation-model/*",
+        "arn:aws:bedrock:*:*:inference-profile/*"
+      ]
+    }
+  ]
+}
