@@ -19,7 +19,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
-    "strands-agents==1.30.0",
+    "strands-agents==1.48.0",
     "strands-agents-tools==0.2.22",
     "bedrock-agentcore==1.4.7",
     "playwright==1.58.0",
